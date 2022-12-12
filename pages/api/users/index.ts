@@ -2,8 +2,9 @@ import apiHandler from "../../../helpers/apiHandler";
 import { createUser } from "../../../services/user.service";
 
 export default apiHandler<{
-  code: number;
+  code: Number;
   data?: any;
+  message?: string;
 }>({
   POST: async (request, response) => {
     try {

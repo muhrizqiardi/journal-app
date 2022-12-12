@@ -1,11 +1,18 @@
+import { unstable_getServerSession } from "next-auth";
 import apiHandler from "../../../helpers/apiHandler";
 import { getManyEntry } from "../../../services/entry.service";
 
 export default apiHandler<{
   code: Number;
   data?: any;
+  message?: string;
 }>({
   GET: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const {
       content,
       mood,

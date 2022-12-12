@@ -1,13 +1,24 @@
 import { Entry } from "@prisma/client";
 import { NextApiHandler } from "next";
+import { unstable_getServerSession } from "next-auth";
 import apiHandler from "../../../helpers/apiHandler";
-import { deleteEntry, getOneEntry, updateEntry } from "../../../services/entry.service";
+import {
+  deleteEntry,
+  getOneEntry,
+  updateEntry,
+} from "../../../services/entry.service";
 
 export default apiHandler<{
   code: Number;
   data?: any;
+  message?: string;
 }>({
   GET: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { id } = request.query as {
       id: string;
     };
@@ -22,13 +33,18 @@ export default apiHandler<{
         data: entry,
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       return response.send({
         code: 500,
       });
     }
   },
-  PATCH: async (request, response) => { 
+  PATCH: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { id } = request.query as {
       id: string;
     };
@@ -50,13 +66,18 @@ export default apiHandler<{
         data: entry,
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       return response.send({
         code: 500,
       });
     }
   },
   DELETE: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { id } = request.query as {
       id: string;
     };
@@ -70,10 +91,10 @@ export default apiHandler<{
         code: 200,
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       return response.send({
         code: 500,
       });
     }
-  }
+  },
 });

@@ -1,3 +1,4 @@
+import { unstable_getServerSession } from "next-auth";
 import apiHandler from "../../../helpers/apiHandler";
 import {
   deleteUser,
@@ -5,8 +6,17 @@ import {
   updateUser,
 } from "../../../services/user.service";
 
-export default apiHandler({
+export default apiHandler<{
+  code: Number;
+  data?: any;
+  message?: string;
+}>({
   GET: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { userId } = request.query as { userId: string };
     try {
       if (userId === undefined) throw new Error("User id is required");
@@ -39,6 +49,11 @@ export default apiHandler({
     }
   },
   PATCH: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { userId } = request.query as { userId: string };
     const { email, password } = JSON.parse(request.body);
 
@@ -79,6 +94,11 @@ export default apiHandler({
     }
   },
   DELETE: async (request, response) => {
+    const session = await unstable_getServerSession(request);
+
+    if (!session)
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
+
     const { userId } = request.query as { userId: string };
 
     try {
