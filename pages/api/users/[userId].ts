@@ -25,6 +25,7 @@ export default apiHandler({
         },
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Error) {
         if (error.message === "User id is required")
           response.status(400).json({
@@ -39,7 +40,7 @@ export default apiHandler({
   },
   PATCH: async (request, response) => {
     const { userId } = request.query as { userId: string };
-    const { email, password } = request.body;
+    const { email, password } = JSON.parse(request.body);
 
     try {
       if (userId === undefined) throw new Error("User id is required");
@@ -64,6 +65,7 @@ export default apiHandler({
         },
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Error) {
         if (error.message === "User id is required")
           response.status(400).json({
@@ -88,6 +90,7 @@ export default apiHandler({
         code: 200,
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Error) {
         if (error.message === "User id is required")
           response.status(400).json({

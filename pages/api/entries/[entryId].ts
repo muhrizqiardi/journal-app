@@ -22,6 +22,7 @@ export default apiHandler<{
         data: entry,
       });
     } catch (error) {
+      console.error(error)
       return response.send({
         code: 500,
       });
@@ -31,7 +32,7 @@ export default apiHandler<{
     const { id } = request.query as {
       id: string;
     };
-    const { content, mood } = request.body;
+    const { content, mood } = JSON.parse(request.body);
 
     try {
       const entry = await updateEntry(
@@ -49,6 +50,7 @@ export default apiHandler<{
         data: entry,
       });
     } catch (error) {
+      console.error(error)
       return response.send({
         code: 500,
       });
@@ -68,6 +70,7 @@ export default apiHandler<{
         code: 200,
       });
     } catch (error) {
+      console.error(error)
       return response.send({
         code: 500,
       });

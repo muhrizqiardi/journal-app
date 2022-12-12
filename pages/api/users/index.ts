@@ -7,7 +7,7 @@ export default apiHandler<{
 }>({
   POST: async (request, response) => {
     try {
-      const { email, password } = request.body;
+      const { email, password } = JSON.parse(request.body);
 
       const user = await createUser({ email, password });
 
@@ -21,6 +21,7 @@ export default apiHandler<{
         },
       });
     } catch (error) {
+      console.error(error);
       response.status(400).json({
         code: 400,
       });

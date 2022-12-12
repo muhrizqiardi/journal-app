@@ -4,7 +4,7 @@ import { createToken, verifyToken } from "../../services/auth.service";
 export default apiHandler({
   POST: async (request, response) => {
     try {
-      const { email, password } = request.body;
+      const { email, password } = JSON.parse(request.body);
 
       const token = await createToken({ email, password });
 
@@ -15,6 +15,7 @@ export default apiHandler({
         },
       });
     } catch (error) {
+      console.error(error);
       response.status(400).json({
         code: 400,
       });
@@ -35,7 +36,10 @@ export default apiHandler({
         data: token,
       });
     } catch (error) {
-      throw error;
+      console.error(error);
+      response.status(400).json({
+        code: 400,
+      });
     }
   },
 });

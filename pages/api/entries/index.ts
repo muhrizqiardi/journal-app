@@ -40,6 +40,7 @@ export default apiHandler<{
         data: entries,
       });
     } catch (error) {
+      console.error(error);
       return response.send({
         code: 500,
       });
