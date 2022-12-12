@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname == "/") {
+    if (!request.headers.has("Authorization"))
+      return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   if (request.nextUrl.pathname.startsWith("/api/entries")) {
     if (!request.headers.has("Authorization"))
-      return NextResponse.rewrite(new URL("/login", request.url));
+      return NextResponse.rewrite(new URL("/api/401", request.url));
   }
 
   if (request.nextUrl.pathname.startsWith("/api/users")) {
