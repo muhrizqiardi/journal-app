@@ -4,17 +4,28 @@ import prisma from "../helpers/prisma";
 
 // Create a new entry
 export async function createEntry(params: {
+  userId?: number;
+  userEmail?: string;
   content: string;
   mood: number;
 }): Promise<Entry> {
   let entry: Entry;
-  const { content, mood } = params;
+  const { content, mood, userId, userEmail } = params;
+
+  if (userEmail === undefined && userId === undefined)
+    throw new Error("`userEmail` or `userId` is undefined");
 
   try {
     entry = await prisma.entry.create({
       data: {
         content,
         mood,
+        user: {
+          connect: {
+            id: userId,
+            email: userEmail,
+          },
+        },
       },
     });
   } catch (error) {
@@ -53,8 +64,11 @@ export async function getManyEntry(params: {
   createdBefore?: string;
   createdAt?: string;
   createdAfter?: string;
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
+  userId?: number;
+  userEmail?: string;
+  orderBy?: "asc" | "desc";
 }): Promise<Entry[]> {
   let entries: Entry[];
   const {
@@ -65,11 +79,20 @@ export async function getManyEntry(params: {
     createdAfter,
     page = 1,
     limit = 10,
+    userId,
+    userEmail,
+    orderBy = "desc",
   } = params;
   try {
+    if (userEmail === undefined && userId === undefined)
+      throw new Error("`userEmail` and `userId` is undefined");
+
     entries = await prisma.entry.findMany({
-      skip: limit * page,
+      skip: limit * (page - 1),
       take: limit,
+      orderBy: {
+        createdAt: orderBy,
+      },
       where: {
         content,
         mood,
@@ -77,6 +100,10 @@ export async function getManyEntry(params: {
           in: createdAt,
           lt: createdBefore,
           gt: createdAfter,
+        },
+        user: {
+          email: userEmail,
+          id: userId,
         },
       },
     });
