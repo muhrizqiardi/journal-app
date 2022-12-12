@@ -24,6 +24,7 @@ export async function createUser(data: {
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed creating new user");
   }
 
@@ -42,6 +43,7 @@ export async function getOneUser(params: { id?: number; email?: string }) {
 
     return user;
   } catch (error) {
+    console.error(error);
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2025") throw new Error("User not found");
     }
@@ -74,6 +76,7 @@ export async function updateUser(
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed updating user");
   }
 
@@ -90,6 +93,7 @@ export async function deleteUser(params: { id: number }): Promise<void> {
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed deleting user");
   }
 }

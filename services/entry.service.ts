@@ -18,6 +18,7 @@ export async function createEntry(params: {
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed creating new entry");
   }
 
@@ -35,6 +36,7 @@ export async function getOneEntry(params: { id: number }): Promise<Entry> {
       },
     });
   } catch (error) {
+    console.error(error);
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2025") throw new Error("Entry not found");
     }
@@ -79,6 +81,7 @@ export async function getManyEntry(params: {
       },
     });
   } catch (error) {
+    console.error(error);
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2025") throw new Error("Entry(s) not found");
     }
@@ -113,6 +116,7 @@ export async function updateEntry(
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed updating an entry");
   }
 
@@ -129,6 +133,7 @@ export async function deleteEntry(params: { id: number }): Promise<void> {
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error("Failed deleting an entry");
   }
 }

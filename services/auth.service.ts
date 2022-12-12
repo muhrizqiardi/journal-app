@@ -17,6 +17,7 @@ export async function createToken(params: {
     user = await getOneUser({ email });
     if (user.password !== password) throw new Error("Invalid credentials");
   } catch (error) {
+    console.error(error)
     throw error;
   }
 
