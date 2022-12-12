@@ -5,15 +5,15 @@ import MultilineToParagraphs from "./MultilineToParagraphs";
 export interface JournalEntryCardProps {
   content: string;
   mood: number;
-  createdAt: string;
+  createdAt: string | Date;
   onDelete?: () => void;
 }
 
 const MoodNumberToEmoji = ({ mood }: { mood: number }) => {
   if (mood === 1) return <>😁</>;
-  if (mood <= 0.75) return <>🙂</>;
-  if (mood <= 0.5) return <>🙁</>;
-  if (mood <= 0.25) return <>😞</>;
+  if (mood === 0.75) return <>🙂</>;
+  if (mood === 0.5) return <>🙁</>;
+  if (mood === 0.25) return <>😞</>;
   return <>-</>;
 };
 
