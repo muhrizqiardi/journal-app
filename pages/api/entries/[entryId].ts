@@ -1,5 +1,3 @@
-import { Entry } from "@prisma/client";
-import { NextApiHandler } from "next";
 import { unstable_getServerSession } from "next-auth";
 import apiHandler from "../../../helpers/apiHandler";
 import {
@@ -14,10 +12,9 @@ export default apiHandler<{
   message?: string;
 }>({
   GET: async (request, response) => {
-    const session = await unstable_getServerSession(request);
+    const session = await unstable_getServerSession(request, response, {});
 
-    if (!session)
-      return response.status(401).json({ code: 401, message: "Unauthorized" });
+    if (!session?.user?.email) throw new Error();
 
     const { id } = request.query as {
       id: string;
@@ -40,10 +37,9 @@ export default apiHandler<{
     }
   },
   PATCH: async (request, response) => {
-    const session = await unstable_getServerSession(request);
+    const session = await unstable_getServerSession(request, response, {});
 
-    if (!session)
-      return response.status(401).json({ code: 401, message: "Unauthorized" });
+    if (!session?.user?.email) throw new Error();
 
     const { id } = request.query as {
       id: string;
@@ -73,18 +69,17 @@ export default apiHandler<{
     }
   },
   DELETE: async (request, response) => {
-    const session = await unstable_getServerSession(request);
+    const session = await unstable_getServerSession(request, response, {});
 
-    if (!session)
-      return response.status(401).json({ code: 401, message: "Unauthorized" });
+    if (!session?.user?.email) throw new Error();
 
-    const { id } = request.query as {
-      id: string;
+    const { entryId } = request.query as {
+      entryId: string;
     };
 
     try {
       await deleteEntry({
-        id: Number.parseInt(id),
+        id: Number.parseInt(entryId),
       });
 
       return response.send({

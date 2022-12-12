@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import AppLayout from "../components/AppLayout";
 import JournalEntryCard from "../components/JournalEntryCard";
 import NewEntryForm from "../components/NewEntryForm";
-import { getManyEntry } from "../services/entry.service";
+import { deleteEntry, getManyEntry } from "../services/entry.service";
 
 const groupEntriesByDate = (entries: Entry[]) => {
   let dates: string[] = [];
@@ -42,8 +42,6 @@ const DateDivider = ({ date }: { date: string }) => (
 export default async function IndexPage() {
   const session = await unstable_getServerSession();
 
-  console.log({ session });
-
   if (!session?.user?.email) return redirect("/login");
 
   const entries = await getManyEntry({
@@ -59,6 +57,7 @@ export default async function IndexPage() {
       {item.entries.map((entry, date) => (
         <JournalEntryCard
           key={index}
+          id={entry.id}
           createdAt={entry.createdAt}
           content={entry.content}
           mood={entry.mood}
