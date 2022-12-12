@@ -1,6 +1,6 @@
 import { unstable_getServerSession } from "next-auth";
 import apiHandler from "../../../helpers/apiHandler";
-import { getManyEntry } from "../../../services/entry.service";
+import { createEntry, getManyEntry } from "../../../services/entry.service";
 
 export default apiHandler<{
   code: Number;
@@ -8,10 +8,9 @@ export default apiHandler<{
   message?: string;
 }>({
   GET: async (request, response) => {
-    const session = await unstable_getServerSession(request);
+    const session = await unstable_getServerSession(request, response, {});
 
-    if (!session)
-      return response.status(401).json({ code: 401, message: "Unauthorized" });
+    if (!session?.user?.email) throw new Error();
 
     const {
       content,
@@ -40,6 +39,7 @@ export default apiHandler<{
         createdAfter,
         page: Number.parseInt(page),
         limit: Number.parseInt(limit),
+        userEmail: session.user.email,
       });
 
       return response.send({
@@ -51,6 +51,32 @@ export default apiHandler<{
       return response.send({
         code: 500,
       });
+    }
+  },
+  POST: async (request, response) => {
+    try {
+      const session = await unstable_getServerSession(request, response, {});
+
+      if (!session?.user?.email) throw new Error();
+
+      const { content, mood } = JSON.parse(request.body) as {
+        content: string;
+        mood: number;
+      };
+
+      const entry = await createEntry({
+        content,
+        mood,
+        userEmail: session.user.email,
+      });
+
+      return response.status(201).send({
+        code: 201,
+        data: entry,
+      });
+    } catch (error) {
+      console.error(error);
+      return response.status(401).json({ code: 401, message: "Unauthorized" });
     }
   },
 });
