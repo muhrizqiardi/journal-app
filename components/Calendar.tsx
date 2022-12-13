@@ -1,8 +1,4 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import CalendarSets from "dayjs-plugin-calendar-sets";
 import Link from "next/link";
@@ -64,27 +60,23 @@ export default function Calendar(props: CalendarProps) {
         </thead>
         <tbody className="text-center">
           {calendarSets.map((week, weekIndex) => (
-            <tr key={weekIndex}>
+            <tr key={"week " + weekIndex.toString()}>
               {week.map((curDay, curDayIndex) => (
                 <td key={curDay}>
                   {curDay.length ? (
                     <Link
                       href={`/entries/${dayjs(curDay).format("YYYY/MM/DD")}`}
-                      className={`btn btn-sm btn-square ${
-                        dayjs(curDay).isSame(
-                          dayjs()
-                            .set("year", year)
-                            .set("month", month)
-                            .set("date", day),
-                          "date"
-                        )
+                      className={`btn btn-sm btn-square ${dayjs(curDay).isSame(
+                        dayjs()
+                          .set("year", year)
+                          .set("month", month)
+                          .set("date", day),
+                        "date"
+                      )
                           ? ""
-                          : "btn-ghost"
-                      } ${
-                        curDayIndex === 5 || curDayIndex === 6
+                          : "btn-ghost"} ${curDayIndex === 5 || curDayIndex === 6
                           ? "text-red-300"
-                          : null
-                      }`}
+                          : null}`}
                     >
                       {dayjs(curDay).format("D")}
                     </Link>
