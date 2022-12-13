@@ -1,43 +1,11 @@
-import { Entry } from "@prisma/client";
-import dayjs from "dayjs";
-import { entries } from "lodash";
 import { unstable_getServerSession } from "next-auth";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppLayout from "../components/AppLayout";
+import DateDivider from "../components/DateDivider";
 import JournalEntryCard from "../components/JournalEntryCard";
 import NewEntryForm from "../components/NewEntryForm";
-import { deleteEntry, getManyEntry } from "../services/entry.service";
-
-const groupEntriesByDate = (entries: Entry[]) => {
-  let dates: string[] = [];
-
-  entries.forEach((entry) => {
-    const curDate = dayjs(entry.createdAt).format("YYYY-MM-DD");
-    const isInDates: boolean =
-      dates.filter((date) => date === curDate).length > 0;
-
-    if (!isInDates) dates.push(curDate);
-  });
-
-  return dates.map((date) => ({
-    date,
-    entries: entries.filter(
-      (entry) => dayjs(entry.createdAt).format("YYYY-MM-DD") === date
-    ),
-  }));
-};
-
-const DateDivider = ({ date }: { date: string }) => (
-  <p className="mt-5 first:mt-0">
-    <Link
-      href={`/entries/${dayjs(date).format("YYYY/MM/DD")}`}
-      className="btn btn-ghost btn-sm font-bold"
-    >
-      {dayjs(date).format("DD MMM YYYY")}
-    </Link>
-  </p>
-);
+import groupEntriesByDate from "../helpers/groupEntriesByDate";
+import { getManyEntry } from "../services/entry.service";
 
 export default async function IndexPage() {
   const session = await unstable_getServerSession();
@@ -53,12 +21,12 @@ export default async function IndexPage() {
 
   const feed = groupEntriesByDate(entries).map((item, index) => (
     <>
-      <DateDivider date={item.date} />
+      <DateDivider key={index} date={item.date} />
       {item.entries.map((entry, date) => (
         <JournalEntryCard
-          key={index}
+          key={entry.id}
           id={entry.id}
-          createdAt={entry.createdAt}
+          createdAt={entry.createdAt.toISOString()}
           content={entry.content}
           mood={entry.mood}
         />
