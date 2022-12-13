@@ -82,8 +82,8 @@ export default function JournalEntryCard(props: JournalEntryCardProps) {
         type="checkbox"
         id="confirmationDialog"
         className="modal-toggle"
-        defaultChecked={false}
         checked={dialogIsOpen}
+        readOnly
       />
       <div className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
