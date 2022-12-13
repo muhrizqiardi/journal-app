@@ -61,9 +61,9 @@ export async function getOneEntry(params: { id: number }): Promise<Entry> {
 export async function getManyEntry(params: {
   content?: string;
   mood?: number;
-  createdBefore?: string;
-  createdAt?: string;
-  createdAfter?: string;
+  createdBefore?: string | Date;
+  createdAt?: string | Date;
+  createdAfter?: string | Date;
   page?: number;
   limit?: number;
   userId?: number;
