@@ -4,9 +4,34 @@ import Calendar from "./Calendar";
 
 interface AppLayoutProps {
   children?: React.ReactNode;
+  sidebar?: React.ReactNode;
 }
 
+const DefaultSidebar = () => (
+  <aside className="w-80 bg-base-100 text-base-content">
+    <div className="p-4 grid-cols-7 gap-2">
+      <Calendar />
+    </div>
+    <ul className="menu p-4 w-80 bg-base-100 text-base-content">
+      <li>
+        <a>Search</a>
+      </li>
+      <li>
+        <a>Statistic</a>
+      </li>
+      <li>
+        <a>About</a>
+      </li>
+      <li>
+        <a>Account</a>
+      </li>
+    </ul>
+  </aside>
+);
+
 export default function AppLayout(props: AppLayoutProps) {
+  const { sidebar = <DefaultSidebar /> } = props;
+
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -26,29 +51,11 @@ export default function AppLayout(props: AppLayoutProps) {
             </Link>
           </div>
         </div>
-          {props.children}
+        {props.children}
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer" className="drawer-overlay"></label>
-        <aside className="w-80 bg-base-100 text-base-content">
-          <div className="p-4 grid-cols-7 gap-2">
-            <Calendar />
-          </div>
-          <ul className="menu p-4 w-80 bg-base-100 text-base-content">
-            <li>
-              <a>Search</a>
-            </li>
-            <li>
-              <a>Statistic</a>
-            </li>
-            <li>
-              <a>About</a>
-            </li>
-            <li>
-              <a>Account</a>
-            </li>
-          </ul>
-        </aside>
+        {sidebar}
       </div>
     </div>
   );
