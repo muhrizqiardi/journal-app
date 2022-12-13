@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { unstable_getServerSession } from "next-auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppLayout from "../../../../../components/AppLayout";
 import Calendar from "../../../../../components/Calendar";
@@ -56,16 +57,16 @@ export default async function EntriesByDayPage(props: {
           </div>
           <ul className="menu p-4 w-80 bg-base-100 text-base-content">
             <li>
-              <a>Search</a>
+              <Link href="/search">Search</Link>
             </li>
             <li>
-              <a>Statistic</a>
+              <Link href="/statistics">Statistics</Link>
             </li>
             <li>
-              <a>About</a>
+              <Link href="/about">About</Link>
             </li>
             <li>
-              <a>Account</a>
+              <Link href="/log-out">Log out</Link>
             </li>
           </ul>
         </aside>
