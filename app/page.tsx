@@ -46,7 +46,7 @@ export default async function IndexPage() {
 
   const entries = await getManyEntry({
     page: 1,
-    limit: 10,
+    limit: 30,
     userEmail: session.user.email,
     orderBy: "desc",
   });

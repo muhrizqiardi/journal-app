@@ -5,7 +5,6 @@ import AppLayout from "../../../../../components/AppLayout";
 import Calendar from "../../../../../components/Calendar";
 import DateDivider from "../../../../../components/DateDivider";
 import JournalEntryCard from "../../../../../components/JournalEntryCard";
-import NewEntryForm from "../../../../../components/NewEntryForm";
 import groupEntriesByDate from "../../../../../helpers/groupEntriesByDate";
 import { getManyEntry } from "../../../../../services/entry.service";
 
@@ -22,7 +21,7 @@ export default async function EntriesByDayPage(props: {
 
   const entries = await getManyEntry({
     page: 1,
-    limit: 10,
+    limit: 30,
     userEmail: session.user.email,
     createdBefore: today.endOf("date").toDate(),
     createdAfter: today.startOf("date").toDate(),
