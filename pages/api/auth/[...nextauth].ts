@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { createToken } from "../../../services/auth.service";
+import bcrypt from "bcrypt";
 import { getOneUser } from "../../../services/user.service";
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
@@ -27,11 +27,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
             const user = await getOneUser({ email: credentials.email });
 
-            if (
-              credentials.email !== user.email ||
-              credentials.password !== user.password
-            )
-              throw new Error("Invalid credentials");
+            const passwordIsCorrect = bcrypt.compareSync(
+              credentials.password,
+              user.password
+            );
+
+            if (!passwordIsCorrect) throw new Error("Invalid credentials");
 
             return {
               id: user.id,

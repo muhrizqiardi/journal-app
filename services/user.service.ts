@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import prisma from "../helpers/prisma";
+import bcrypt from "bcrypt"
 
 const select = {
   createdAt: true,
@@ -16,11 +17,13 @@ export async function createUser(data: {
   let user: User;
   const { email, password } = data;
 
+  const hashedPassword  = bcrypt.hashSync(password, 10);
+
   try {
     user = await prisma.user.create({
       data: {
         email,
-        password,
+        password: hashedPassword,
       },
     });
   } catch (error) {
