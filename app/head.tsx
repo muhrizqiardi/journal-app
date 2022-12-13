@@ -2,6 +2,7 @@ export default function Head() {
   return (
     <>
       <title>Journal App</title>
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
       {/* Primary Meta Tags */}
       <meta name="title" content="Journal App" />
       <meta
@@ -18,7 +19,10 @@ export default function Head() {
       />
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content="https://journal-app-lilac.vercel.app/" />
+      <meta
+        property="twitter:url"
+        content="https://journal-app-lilac.vercel.app/"
+      />
       <meta property="twitter:title" content="Journal App" />
       <meta
         property="twitter:description"
