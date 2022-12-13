@@ -28,6 +28,8 @@ export default function Head() {
         property="twitter:description"
         content="Create journal entries and track your mood!"
       />
+
+      <link rel="manifest" href="/manifest.json" />
     </>
   );
 }
