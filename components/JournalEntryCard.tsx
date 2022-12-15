@@ -2,10 +2,12 @@
 
 import { TrashIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
-import { useState } from "react";
-import MultilineToParagraphs from "./MultilineToParagraphs";
-import { useTransition } from "react";
+import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import MultilineToParagraphs from "./MultilineToParagraphs";
+
+dayjs.extend(utc);
 
 export interface JournalEntryCardProps {
   id: number;
@@ -46,6 +48,7 @@ export default function JournalEntryCard(props: JournalEntryCardProps) {
       setIsLoading(false);
     }
   };
+  const createdAtTime = dayjs(props.createdAt).utcOffset(7).format("HH:mm");
 
   return (
     <>
@@ -59,9 +62,7 @@ export default function JournalEntryCard(props: JournalEntryCardProps) {
             <MultilineToParagraphs text={props.content} />
           </article>
           <div className="card-actions mt-2 justify-end items-end">
-            <p className="font-bold text-sm">
-              {dayjs(props.createdAt).format("HH:mm")}
-            </p>
+            <p className="font-bold text-sm">{createdAtTime}</p>
             <div className="h-8 w-8 text-lg inline-flex items-center select-none">
               <span>
                 <MoodNumberToEmoji mood={props.mood} />
