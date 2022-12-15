@@ -5,6 +5,7 @@ import Calendar from "./Calendar";
 interface AppLayoutProps {
   children?: React.ReactNode;
   sidebar?: React.ReactNode;
+  title?: React.ReactNode;
 }
 
 const DefaultSidebar = () => (
@@ -30,7 +31,7 @@ const DefaultSidebar = () => (
 );
 
 export default function AppLayout(props: AppLayoutProps) {
-  const { sidebar = <DefaultSidebar /> } = props;
+  const { sidebar = <DefaultSidebar />, title = "journal" } = props;
 
   return (
     <div className="drawer drawer-mobile">
@@ -47,7 +48,7 @@ export default function AppLayout(props: AppLayoutProps) {
           </div>
           <div className="flex-1">
             <Link href="/" className="btn btn-ghost normal-case text-xl">
-              journal
+              {title}
             </Link>
           </div>
         </div>
