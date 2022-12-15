@@ -1,10 +1,8 @@
 import { unstable_getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import AppLayout from "../components/AppLayout";
-import DateDivider from "../components/DateDivider";
-import JournalEntryCard from "../components/JournalEntryCard";
+import EntriesGroupedByDate from "../components/EntriesGroupedByDate";
 import NewEntryForm from "../components/NewEntryForm";
-import groupEntriesByDate from "../helpers/groupEntriesByDate";
 import { getManyEntry } from "../services/entry.service";
 
 export default async function IndexPage() {
@@ -19,26 +17,11 @@ export default async function IndexPage() {
     orderBy: "desc",
   });
 
-  const feed = groupEntriesByDate(entries).map((item, index) => (
-    <>
-      <DateDivider key={index} date={item.date} />
-      {item.entries.map((entry, date) => (
-        <JournalEntryCard
-          key={entry.id}
-          id={entry.id}
-          createdAt={entry.createdAt.toISOString()}
-          content={entry.content}
-          mood={entry.mood}
-        />
-      ))}
-    </>
-  ));
-
   return (
     <AppLayout>
       <div className="mb-24 flex flex-col p-4 gap-4">
         <NewEntryForm />
-        {feed}
+        <EntriesGroupedByDate entries={entries} />
       </div>
     </AppLayout>
   );
