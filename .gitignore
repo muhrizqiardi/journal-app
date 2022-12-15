@@ -35,3 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+public/sw.js
+public/sw.js.map
+public/workbox-212689ce.js
+public/workbox-212689ce.js.map
