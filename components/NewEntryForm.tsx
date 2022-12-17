@@ -64,7 +64,7 @@ function MoodSelector(props: {
   );
 }
 
-export default function NewEntryForm() {
+export default function NewEntryForm(props: { isSkeleton?: boolean }) {
   const router = useRouter();
   const [mood, setMood] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -110,12 +110,12 @@ export default function NewEntryForm() {
             className="textarea textarea-bordered h-24"
             placeholder="Enter text here..."
             required
-            disabled={isLoading}
+            disabled={isLoading || props.isSkeleton}
             {...register("content")}
           ></textarea>
         </div>
         <div className="card-actions mt-2 justify-end items-end">
-          {!isLoading ? (
+          {!isLoading && !props.isSkeleton ? (
             <MoodSelector
               mood={mood}
               handleChangeMood={(mood) => setMood(mood)}
@@ -124,7 +124,7 @@ export default function NewEntryForm() {
           <button
             type="submit"
             className={`btn btn-sm ${isLoading ? "loading" : ""}`}
-            disabled={isLoading}
+            disabled={isLoading || props.isSkeleton}
           >
             <PaperAirplaneIcon className="h-4 w-4" />
           </button>
