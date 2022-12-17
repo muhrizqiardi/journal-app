@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import MoodNumberToEmoji from "./MoodNumberToEmoji";
 import MultilineToParagraphs from "./MultilineToParagraphs";
 
 dayjs.extend(utc);
@@ -16,14 +17,6 @@ export interface JournalEntryCardProps {
   createdAt: string | Date;
   onDelete?: (entryId: number) => void;
 }
-
-const MoodNumberToEmoji = ({ mood }: { mood: number }) => {
-  if (mood === 1) return <>😁</>;
-  if (mood === 0.75) return <>🙂</>;
-  if (mood === 0.5) return <>🙁</>;
-  if (mood === 0.25) return <>😞</>;
-  return <>-</>;
-};
 
 export default function JournalEntryCard(props: JournalEntryCardProps) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
