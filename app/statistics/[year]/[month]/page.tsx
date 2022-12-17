@@ -42,7 +42,7 @@ export default async function StatisticsByMonthPage(props: {
   const avgMoodPerDaySeries = Array(curMonth.daysInMonth())
     .fill(null)
     .map((_, index) => {
-      const curIndexDate = dayjs(curMonth).set("date", index);
+      const curIndexDate = dayjs(curMonth).set("date", index + 1);
       const entriesGroupedByDateIndex = entriesGroupedByDate.findIndex((item) =>
         curIndexDate.isSame(dayjs(item.date, "YYYY-MM-DD"), "date")
       );
