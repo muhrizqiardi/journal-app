@@ -5,19 +5,12 @@ import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppLayout from "../../../components/AppLayout";
+import MoodNumberToEmoji from "../../../components/MoodNumberToEmoji";
 import groupEntriesByDate from "../../../helpers/groupEntriesByDate";
 import { getManyEntry } from "../../../services/entry.service";
 import YearlyMoodLineChart from "./YearlyMoodLineChart";
 
 dayjs.extend(utc);
-
-const MoodNumberToEmoji = ({ mood }: { mood: number }) => {
-  if (mood >= 1) return <>😁</>;
-  if (mood >= 0.75) return <>🙂</>;
-  if (mood >= 0.5) return <>🙁</>;
-  if (mood <= 0.5) return <>😞</>;
-  return <>-</>;
-};
 
 function groupEntriesByMonth(entries: Entry[]) {
   let months: string[] = []; // Contains months w/ format YYYY-MM
