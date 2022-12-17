@@ -94,7 +94,10 @@ export async function getManyEntry(params: {
         createdAt: orderBy,
       },
       where: {
-        content,
+        content: {
+          contains: content,
+          mode: "insensitive",
+        },
         mood,
         createdAt: {
           in: createdAt,
