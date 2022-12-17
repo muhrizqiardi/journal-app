@@ -5,19 +5,12 @@ import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppLayout from "../../../../components/AppLayout";
+import MoodNumberToEmoji from "../../../../components/MoodNumberToEmoji";
 import groupEntriesByDate from "../../../../helpers/groupEntriesByDate";
 import { getManyEntry } from "../../../../services/entry.service";
 import MonthlyMoodLineChart from "./MonthlyMoodLineChart";
 
 dayjs.extend(utc);
-
-const MoodNumberToEmoji = ({ mood }: { mood: number }) => {
-  if (mood >= 1) return <>😁</>;
-  if (mood >= 0.75) return <>🙂</>;
-  if (mood >= 0.5) return <>🙁</>;
-  if (mood <= 0.5) return <>😞</>;
-  return <>-</>;
-};
 
 export default async function StatisticsByMonthPage(props: {
   params: {
@@ -60,13 +53,6 @@ export default async function StatisticsByMonthPage(props: {
   const avgMood =
     avgMoodPerDaySeries.filter((a) => a).reduce((a, b) => a + b, 0) /
     avgMoodPerDaySeries.filter((a) => a).length;
-
-  console.log({
-    entriesLength: entries.length,
-    entriesGroupedByDate,
-    avgMoodPerDaySeries,
-    avgMood,
-  });
 
   const sidebar = (
     <aside className="w-80 bg-base-100 text-base-content">
