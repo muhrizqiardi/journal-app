@@ -4,17 +4,10 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import MoodNumberToEmoji from "./MoodNumberToEmoji";
 
 export interface INewEntryForm {
   content: string;
-}
-
-function MoodNumberToEmoji({ mood }: { mood: number }) {
-  if (mood === 1) return <>😁</>;
-  if (mood === 0.75) return <>🙂</>;
-  if (mood === 0.5) return <>🙁</>;
-  if (mood === 0.25) return <>😞</>;
-  return <>-</>;
 }
 
 function MoodSelector(props: {
@@ -51,8 +44,8 @@ function MoodSelector(props: {
         <li>
           <button
             type="button"
-            onClick={() => props.handleChangeMood(0.5)}
-            className={`${props.mood === 0.5 ? "font-bold" : ""}`}
+            onClick={() => props.handleChangeMood(0.25)}
+            className={`${props.mood === 0.25 ? "font-bold" : ""}`}
           >
             {"🙁 Sad"}
           </button>
@@ -60,8 +53,8 @@ function MoodSelector(props: {
         <li>
           <button
             type="button"
-            onClick={() => props.handleChangeMood(0.25)}
-            className={`${props.mood === 0.25 ? "font-bold" : ""}`}
+            onClick={() => props.handleChangeMood(0)}
+            className={`${props.mood === 0 ? "font-bold" : ""}`}
           >
             {"😞 Saddest possible"}
           </button>
