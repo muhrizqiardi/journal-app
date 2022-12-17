@@ -3,6 +3,7 @@ export default function Head() {
     <>
       <title>Journal App</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       {/* Primary Meta Tags */}
       <meta name="title" content="Journal App" />
       <meta
