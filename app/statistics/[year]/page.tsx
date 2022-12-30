@@ -98,7 +98,7 @@ export default async function StatisticsByYearPage(props: {
   );
 
   return (
-    <AppLayout title={"statistics"} sidebar={sidebar}>
+    <AppLayout title={"Statistics"} sidebar={sidebar}>
       <div className="p-4 pt-0 flex flex-col gap-4">
         <div className="text-sm breadcrumbs">
           <ul>

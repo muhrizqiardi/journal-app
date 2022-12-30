@@ -61,7 +61,10 @@ export default async function EntriesByDayPage(props: {
   const feed = <EntriesGroupedByDate entries={entries} />;
 
   return (
-    <AppLayout sidebar={sidebar}>
+    <AppLayout
+      sidebar={sidebar}
+      title={`Entries at ${today.format("DD MMMM YYYY")}`}
+    >
       <div className="mb-24 flex flex-col p-4 gap-4">{feed}</div>
     </AppLayout>
   );

@@ -25,7 +25,7 @@ export default async function IndexPage(props: {
   });
 
   return (
-    <AppLayout>
+    <AppLayout title="Home">
       <div className="mb-24 flex flex-col p-4 gap-4">
         <NewEntryForm />
         <EntriesGroupedByDate
