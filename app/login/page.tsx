@@ -9,13 +9,13 @@ export default async function LoginPage() {
 
   if (!session)
     return (
-      <div className="p-4 pt-24 flex flex-col items-center">
+      <div className="p-4 my-24 flex flex-col items-center">
         <LoginPageForm />
       </div>
     );
 
   return (
-    <div className="flex items-center justify-center text-center">
+    <div className="p-4 my-24 flex items-center justify-center text-center">
       <p>Loading...</p>
     </div>
   );
