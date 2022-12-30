@@ -6,6 +6,7 @@ interface AppLayoutProps {
   children?: React.ReactNode;
   sidebar?: React.ReactNode;
   title?: React.ReactNode;
+  subtitle?: React.ReactNode;
 }
 
 const DefaultSidebar = () => (
@@ -50,7 +51,12 @@ export default function AppLayout(props: AppLayoutProps) {
             <Link href="/" className="btn btn-ghost normal-case text-xl">
               <HomeIcon className="w-6 h-6" />
             </Link>
-            <p className="ml-4 text-xl font-semibold">{title}</p>
+            <div className="flex flex-col justify-center">
+              <p className="ml-4 text-lg font-semibold leading-tight">
+                {title}
+              </p>
+              <p className="ml-4 text-xs">{props.subtitle}</p>
+            </div>
           </div>
         </div>
         {props.children}

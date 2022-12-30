@@ -99,7 +99,11 @@ export default async function StatisticsByYearPage(props: {
   );
 
   return (
-    <AppLayout title={"Statistics"} sidebar={sidebar}>
+    <AppLayout
+      title="Statistics"
+      subtitle={curYear.format("[Year] YYYY")}
+      sidebar={sidebar}
+    >
       <div className="p-4 pt-0 flex flex-col gap-4">
         <div className="text-sm breadcrumbs">
           <ul>

@@ -102,8 +102,6 @@ export default async function StatisticsByMonthPage(props: {
     )[0].count
   );
 
-  console.log({ monthlyEntriesCount });
-
   const sidebar = (
     <aside className="w-80 bg-base-100 text-base-content">
       <ul className="menu p-4 w-80 bg-base-100 text-base-content">
@@ -127,7 +125,11 @@ export default async function StatisticsByMonthPage(props: {
   );
 
   return (
-    <AppLayout title={"statistics"} sidebar={sidebar}>
+    <AppLayout
+      title="Statistics"
+      subtitle={curMonth.format("MMM YYYY")}
+      sidebar={sidebar}
+    >
       <div className="p-4 pt-0 flex flex-col gap-4">
         <div className="text-sm breadcrumbs">
           <ul>
