@@ -1,18 +1,12 @@
 "use client";
 
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
+  CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title,
+  Tooltip
 } from "chart.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { Line } from "react-chartjs-2";
 
 dayjs.extend(utc);
 
@@ -31,8 +25,6 @@ export default function YearlyMoodLineChart(props: {
   year: number;
 }) {
   const curYear = dayjs().utcOffset(7).set("year", props.year);
-
-  console.log({ length: props.moodSeries.length });
 
   return (
     <div className="h-96">

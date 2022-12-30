@@ -7,7 +7,7 @@ import NewEntryForm from "../components/NewEntryForm";
 import { getManyEntry } from "../services/entry.service";
 
 export default async function IndexPage(props: {
-  searchParams: { page?: string };
+  searchParams?: { page?: string };
 }) {
   const {
     searchParams: { page = "1" },
