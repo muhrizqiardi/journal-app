@@ -9,7 +9,12 @@ import { getManyEntry } from "../../../../../services/entry.service";
 
 export default async function EntriesByDayPage(props: {
   params: { year: string; month: string; day: string };
+  searchParams: { page?: string };
 }) {
+  const {
+    searchParams: { page = "1" },
+  } = props;
+
   const session = await unstable_getServerSession();
 
   if (!session?.user?.email) return redirect("/login");
@@ -19,7 +24,7 @@ export default async function EntriesByDayPage(props: {
   ).utcOffset(7);
 
   const entries = await getManyEntry({
-    page: 1,
+    page: Number.parseInt(page),
     limit: 30,
     userEmail: session.user.email,
     createdBefore: today.endOf("date").toDate(),
@@ -53,11 +58,7 @@ export default async function EntriesByDayPage(props: {
     </aside>
   );
 
-  const feed = entries.length ? (
-    <EntriesGroupedByDate entries={entries} />
-  ) : (
-    <p className="text-center">There is nothing here</p>
-  );
+  const feed = <EntriesGroupedByDate entries={entries} />;
 
   return (
     <AppLayout sidebar={sidebar}>
