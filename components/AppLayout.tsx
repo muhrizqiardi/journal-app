@@ -1,4 +1,4 @@
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Bars3Icon, HomeIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Calendar from "./Calendar";
 
@@ -48,8 +48,9 @@ export default function AppLayout(props: AppLayoutProps) {
           </div>
           <div className="flex-1">
             <Link href="/" className="btn btn-ghost normal-case text-xl">
-              {title}
+              <HomeIcon className="w-6 h-6" />
             </Link>
+            <p className="ml-4 text-xl font-semibold">{title}</p>
           </div>
         </div>
         {props.children}

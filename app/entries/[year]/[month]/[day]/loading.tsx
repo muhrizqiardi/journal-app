@@ -2,7 +2,7 @@ import AppLayout from "../../../../../components/AppLayout";
 
 export default function EntriesByDayPage() {
   return (
-    <AppLayout>
+    <AppLayout title="Entries">
       <div className="mb-24 flex flex-col p-4 gap-4">
         <div className="animate-pulse">
           <div className="mt-5 mb-3 w-28">

@@ -3,7 +3,7 @@ import NewEntryForm from "../components/NewEntryForm";
 
 export default function IndexLoadingPage() {
   return (
-    <AppLayout>
+    <AppLayout title="Home">
       <div className="mb-24 flex flex-col p-4 gap-4">
         <NewEntryForm isSkeleton />
         <div className="animate-pulse">
