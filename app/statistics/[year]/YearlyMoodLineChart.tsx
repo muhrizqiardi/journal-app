@@ -32,8 +32,6 @@ export default function YearlyMoodLineChart(props: {
 }) {
   const curYear = dayjs().utcOffset(7).set("year", props.year);
 
-  console.log({ length: props.moodSeries.length });
-
   return (
     <div className="h-96">
       <Line

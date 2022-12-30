@@ -7,8 +7,67 @@ import { redirect } from "next/navigation";
 import AppLayout from "../../../../components/AppLayout";
 import MoodNumberToEmoji from "../../../../components/MoodNumberToEmoji";
 import groupEntriesByDate from "../../../../helpers/groupEntriesByDate";
+import prisma from "../../../../helpers/prisma";
 import { getManyEntry } from "../../../../services/entry.service";
 import MonthlyMoodLineChart from "./MonthlyMoodLineChart";
+
+const getMonthlyEntriesCountQuery = async (
+  year: number,
+  month: number,
+  email: string
+) => {
+  const yyMmString = `${year.toString()}-${month.toString().padStart(2, "0")}`;
+
+  return await prisma.$queryRaw<{ count: bigint }[]>`
+  select 
+    count(e."id") 
+  from 
+    public."Entry" e 
+    inner join public."User" u ON e."userId" = u."id" 
+  where 
+    to_char(e."createdAt", 'YYYY-MM') = ${yyMmString}
+    AND u.email = ${email}
+`;
+};
+const getAvgMoodPerDaySeriesQuery = async (
+  year: number,
+  month: number,
+  email: string
+) => {
+  const yyMmString = `${year.toString()}-${month.toString().padStart(2, "0")}`;
+
+  return await prisma.$queryRaw<{ date: string; avg_mood: number | null }[]>`
+  with dates as (
+    select 
+      generate_series :: date as date 
+    from 
+      generate_series(
+        date_trunc('month', ${`${yyMmString}-01`} :: date):: date, 
+        date_trunc('month', ${`${yyMmString}-01`} :: date) + interval '1 month' - interval '1 day', 
+        '1 day'
+      )
+  ), 
+  avg_mood_per_day as (
+    select 
+      to_char(e."createdAt", 'YYYY-MM-DD') as date, 
+      avg(e.mood) as avg_mood 
+    from 
+      public."Entry" e 
+      inner join public."User" u ON e."userId" = u."id" 
+    where 
+      to_char(e."createdAt", 'YYYY-MM') = ${yyMmString} 
+      AND u.email = ${email} 
+    group by 
+      date
+  ) 
+  select 
+    d.date, 
+    a.avg_mood 
+  from 
+    avg_mood_per_day a full 
+    outer join dates d on a.date = d.date :: text
+`;
+};
 
 dayjs.extend(utc);
 
@@ -24,35 +83,29 @@ export default async function StatisticsByMonthPage(props: {
     .utcOffset(7);
   const session = await unstable_getServerSession();
 
-  if (!session?.user?.email) return redirect("/login");
+  if (session?.user?.email === undefined) return redirect("/login");
 
-  const entries: Entry[] = await getManyEntry({
-    userEmail: session.user.email,
-    createdBefore: curMonth.endOf("month").toDate(),
-    createdAfter: curMonth.startOf("month").toDate(),
-  });
-  const entriesGroupedByDate = groupEntriesByDate(entries);
-  const avgMoodPerDaySeries = Array(curMonth.daysInMonth())
-    .fill(null)
-    .map((_, index) => {
-      const curIndexDate = dayjs(curMonth).set("date", index + 1);
-      const entriesGroupedByDateIndex = entriesGroupedByDate.findIndex((item) =>
-        curIndexDate.isSame(dayjs(item.date, "YYYY-MM-DD"), "date")
-      );
-
-      if (entriesGroupedByDateIndex > -1)
-        return (
-          entriesGroupedByDate[entriesGroupedByDateIndex].entries
-            .map((entry) => entry.mood)
-            .reduce((a, b) => a + b, 0) /
-          entriesGroupedByDate[entriesGroupedByDateIndex].entries.length
-        );
-
-      return null;
-    });
+  const avgMoodPerDay = (
+    await getAvgMoodPerDaySeriesQuery(
+      curMonth.year(),
+      curMonth.month() + 1,
+      session.user.email
+    )
+  ).map((item) => item.avg_mood);
   const avgMood =
-    avgMoodPerDaySeries.filter((a) => a).reduce((a, b) => a + b, 0) /
-    avgMoodPerDaySeries.filter((a) => a).length;
+    avgMoodPerDay.filter((a) => a).reduce((a, b) => a + b, 0) /
+    avgMoodPerDay.filter((a) => a).length;
+  const monthlyEntriesCount = Number(
+    (
+      await getMonthlyEntriesCountQuery(
+        curMonth.year(),
+        curMonth.month() + 1,
+        session.user.email
+      )
+    )[0].count
+  );
+
+  console.log({ monthlyEntriesCount });
 
   const sidebar = (
     <aside className="w-80 bg-base-100 text-base-content">
@@ -122,7 +175,8 @@ export default async function StatisticsByMonthPage(props: {
               Total entries {curMonth.format("MMMM YYYY")}
             </div>
             <div className="stat-value">
-              {entries.length} {entries.length > 1 ? "entries" : "entry"}
+              {monthlyEntriesCount}{" "}
+              {monthlyEntriesCount > 1 ? "entries" : "entry"}
             </div>
           </div>
           <div className="stat">
@@ -143,7 +197,7 @@ export default async function StatisticsByMonthPage(props: {
         <MonthlyMoodLineChart
           year={curMonth.year()}
           month={curMonth.month()}
-          moodSeries={avgMoodPerDaySeries}
+          moodSeries={avgMoodPerDay}
         />
       </div>
     </AppLayout>
