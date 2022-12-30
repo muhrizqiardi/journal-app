@@ -51,7 +51,7 @@ export default async function SearchIndexPage(props: {
     });
 
   return (
-    <AppLayout title="search" sidebar={sidebar}>
+    <AppLayout title="Search" sidebar={sidebar}>
       <div className="mb-24 flex flex-col p-4 gap-4">
         <SearchBox defaultValue={props.searchParams?.keyword ?? ""} />
 

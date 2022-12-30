@@ -1,8 +1,32 @@
+import Link from "next/link";
 import AppLayout from "../../components/AppLayout";
 
 export default function SearchLoadingPage() {
   return (
-    <AppLayout>
+    <AppLayout
+      title="Search"
+      sidebar={
+        <aside className="w-80 bg-base-100 text-base-content">
+          <ul className="menu p-4 w-80 bg-base-100 text-base-content">
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+            <li>
+              <Link href="/search">Search</Link>
+            </li>
+            <li>
+              <Link href="/statistics">Statistics</Link>
+            </li>
+            <li>
+              <Link href="/about">About</Link>
+            </li>
+            <li>
+              <Link href="/log-out">Log out</Link>
+            </li>
+          </ul>
+        </aside>
+      }
+    >
       <div className="mb-24 flex flex-col p-4 gap-4">
         <div className="form-control w-full">
           <div className="input-group">
