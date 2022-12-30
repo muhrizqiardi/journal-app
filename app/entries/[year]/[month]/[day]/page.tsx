@@ -9,7 +9,7 @@ import { getManyEntry } from "../../../../../services/entry.service";
 
 export default async function EntriesByDayPage(props: {
   params: { year: string; month: string; day: string };
-  searchParams: { page?: string };
+  searchParams: { page: string };
 }) {
   const {
     searchParams: { page = "1" },
