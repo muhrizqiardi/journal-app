@@ -3,16 +3,28 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
+import useError from "../../helpers/useError";
 
 interface IRegisterUser {
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export default function RegisterPageForm() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isError, errorMessage, setError } = useError(false);
   const { register, handleSubmit } = useForm<IRegisterUser>();
   const onSubmit: SubmitHandler<IRegisterUser> = async (data) => {
     try {
+      if (data.password !== data.confirmPassword)
+        throw new Error(
+          "Sign in failed: Password and Confirm Password fields should be the same"
+        );
+
+      setError(false);
+      setIsLoading(true);
       const registerUserResult = await fetch("/api/users", {
         method: "POST",
         body: JSON.stringify(data),
@@ -27,6 +39,9 @@ export default function RegisterPageForm() {
         throw new Error(`Sign in failed: ${signInResult?.error}`);
     } catch (error) {
       console.error(error);
+      setError(true, error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,32 +59,57 @@ export default function RegisterPageForm() {
           <input
             type="email"
             id="email"
-            placeholder="Enter email"
             className="input mb-2 input-bordered w-full"
+            disabled={isLoading}
             {...register("email")}
           />
+
           <label className="label" htmlFor="password">
             <span className="label-text">Password</span>
           </label>
           <input
             type="password"
             id="password"
-            placeholder="Enter password"
             className="input mb-2 input-bordered w-full"
+            disabled={isLoading}
+            minLength={8}
             {...register("password")}
           />
-          <label htmlFor="password">
-            <span className="label-text">Minimum 8 characters</span>
+
+          <label className="label" htmlFor="confirmPassword">
+            <span className="label-text">Confirm password</span>
           </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            className="input mb-2 input-bordered w-full"
+            disabled={isLoading}
+            minLength={8}
+            {...register("confirmPassword")}
+          />
         </div>
         <p>
           Or log in to account{" "}
-          <Link href="/register" className="link link-primary">
+          <Link href="/login" className="link link-primary">
             here
           </Link>
         </p>
+
+        {isError ? (
+          <div className="alert alert-error shadow-lg my-4">
+            <div>
+              <span>{errorMessage}</span>
+            </div>
+          </div>
+        ) : null}
+
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Register</button>
+          <button
+            className={`btn btn-primary ${isLoading ? "loading" : ""}`}
+            disabled={isLoading}
+          >
+            Register
+          </button>
         </div>
       </div>
     </form>

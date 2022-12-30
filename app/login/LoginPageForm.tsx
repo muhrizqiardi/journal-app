@@ -2,7 +2,9 @@
 
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import useError from "../../helpers/useError";
 
 interface ILoginUser {
   email: string;
@@ -10,10 +12,15 @@ interface ILoginUser {
 }
 
 export default function LoginPageForm() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { errorMessage, isError, setError } = useError(false);
   const { register, handleSubmit } = useForm<ILoginUser>();
 
   const onSubmit: SubmitHandler<ILoginUser> = async (data) => {
     try {
+      setIsLoading(true);
+      setError(false);
+
       const result = await signIn("credentials", {
         ...data,
         callbackUrl: "/",
@@ -23,6 +30,9 @@ export default function LoginPageForm() {
         throw new Error(`Sign in failed: ${result?.error}`);
     } catch (error) {
       console.error(error);
+      setError(true, error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,8 +50,8 @@ export default function LoginPageForm() {
           <input
             type="email"
             id="email"
-            placeholder="Type here"
             className="input mb-2 input-bordered w-full"
+            disabled={isLoading}
             {...register("email")}
           />
           <label className="label" htmlFor="password">
@@ -50,19 +60,35 @@ export default function LoginPageForm() {
           <input
             type="password"
             id="password"
-            placeholder="Type here"
             className="input mb-2 input-bordered w-full"
+            disabled={isLoading}
+            minLength={8}
             {...register("password")}
           />
         </div>
+
         <p>
           Or register account{" "}
           <Link href="/register" className="link link-primary">
             here
           </Link>
         </p>
+
+        {isError ? (
+          <div className="alert alert-error shadow-lg my-4">
+            <div>
+              <span>{errorMessage}</span>
+            </div>
+          </div>
+        ) : null}
+
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Login</button>
+          <button
+            className={`btn btn-primary ${isLoading ? "loading" : ""}`}
+            disabled={isLoading}
+          >
+            Login
+          </button>
         </div>
       </div>
     </form>
