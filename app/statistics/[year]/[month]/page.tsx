@@ -1,4 +1,3 @@
-import { Entry } from "@prisma/client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { unstable_getServerSession } from "next-auth";
@@ -6,9 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppLayout from "../../../../components/AppLayout";
 import MoodNumberToEmoji from "../../../../components/MoodNumberToEmoji";
-import groupEntriesByDate from "../../../../helpers/groupEntriesByDate";
 import prisma from "../../../../helpers/prisma";
-import { getManyEntry } from "../../../../services/entry.service";
 import MonthlyMoodLineChart from "./MonthlyMoodLineChart";
 
 const getMonthlyEntriesCountQuery = async (

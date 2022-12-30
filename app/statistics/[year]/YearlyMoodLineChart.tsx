@@ -1,18 +1,12 @@
 "use client";
 
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
+  CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title,
+  Tooltip
 } from "chart.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { Line } from "react-chartjs-2";
 
 dayjs.extend(utc);
 
