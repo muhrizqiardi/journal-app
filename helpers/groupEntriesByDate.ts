@@ -8,7 +8,7 @@ const groupEntriesByDate = (entries: Entry[]) => {
   let dates: string[] = [];
 
   entries.forEach((entry) => {
-    const curDate = dayjs(entry.createdAt).format("YYYY-MM-DD");
+    const curDate = dayjs(entry.createdAt).utcOffset(7).format("YYYY-MM-DD");
     const isInDates: boolean =
       dates.filter((date) => date === curDate).length > 0;
 
